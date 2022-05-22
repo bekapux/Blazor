@@ -1,0 +1,40 @@
+﻿<div class="col-lg-6 col-sm-12 p-2">
+    <div class="card" @onclick="(args)=>ProductSelected(args,Product.Name)">
+        <div class="card-body">
+            <h5 class="card-title">Product @Product.Id</h5>
+            <h6 class="card-subtitle mb-2 text-muted">@Product.Name</h6>
+            <input type="checkbox" @onchange="@FavouriteUpdated" /> Add to Favourites <br/><br/>
+            <p>Show Properties <input type="checkbox" @bind="@Product.IsActive" /></p>
+
+            @if (Product.IsActive && Product.ProductProperties.Any())
+            {
+                for (var i = 0; i < Product.ProductProperties.Count; i++)
+                {
+                    <div> @(i+1). @Product.ProductProperties[i].Key - @Product.ProductProperties[i].Value </div>
+                }
+            }
+
+            <hr />
+            <_EditDeleteButton IsActive="@Product.IsActive" />
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Demo_Product Product { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnFavouriteSelection { get; set; }
+    [Parameter]
+    public EventCallback<string> SelectedProduct { get; set; }
+
+
+    public async Task FavouriteUpdated(ChangeEventArgs e)
+    {
+        await OnFavouriteSelection.InvokeAsync((bool)e.Value);
+    }
+
+    public async Task ProductSelected(MouseEventArgs e, string name)
+    {
+        await SelectedProduct.InvokeAsync(Product.Name);
+    }
+}

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangy_server", "Tangy_serve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangy_Client", "Tanky_Client\Tangy_Client.csproj", "{DFE5D881-54A8-4A73-AC35-DD0F5609A98F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangy_Models", "Tangy_Models\Tangy_Models.csproj", "{D28348F1-EFBF-4E2D-B6E1-7E8D51887531}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangy_Models", "Tangy_Models\Tangy_Models.csproj", "{D28348F1-EFBF-4E2D-B6E1-7E8D51887531}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
