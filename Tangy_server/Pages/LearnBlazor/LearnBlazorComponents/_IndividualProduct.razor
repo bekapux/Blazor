@@ -1,9 +1,10 @@
 ﻿<div class="col-lg-6 col-sm-12 p-2">
-    <div class="card" @onclick="(args)=>ProductSelected(args,Product.Name)">
+    <div class="card" @onclick="(args)=>ProductSelected(args, Product.Name)">
         <div class="card-body">
             <h5 class="card-title">Product @Product.Id</h5>
             <h6 class="card-subtitle mb-2 text-muted">@Product.Name</h6>
-            <input type="checkbox" @onchange="@FavouriteUpdated" /> Add to Favourites <br/><br/>
+            <p>RF from Parent - @FirstFragment @SecondFragment</p>
+            <input type="checkbox" @onchange="@FavouriteUpdated" /> Add to Favourites <br /><br />
             <p>Show Properties <input type="checkbox" @bind="@Product.IsActive" /></p>
 
             @if (Product.IsActive && Product.ProductProperties.Any())
@@ -26,6 +27,10 @@
     public EventCallback<bool> OnFavouriteSelection { get; set; }
     [Parameter]
     public EventCallback<string> SelectedProduct { get; set; }
+    [Parameter]
+    public RenderFragment FirstFragment { get; set; }
+    [Parameter]
+    public RenderFragment SecondFragment { get; set; }
 
 
     public async Task FavouriteUpdated(ChangeEventArgs e)

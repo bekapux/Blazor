@@ -53,7 +53,7 @@
             {
                 <tr>
                     <td><input @bind="@item.Name" @bind:event="oninput"/></td>
-                    <td><input @bind="@item.Price" @bind:event="oninput"/></td>
+                    <td><input type="number" @bind="@item.Price" @bind:event="oninput"/></td>
                     <td><input type="checkbox" @bind="@item.IsActive" /></td>
                 </tr>
             }

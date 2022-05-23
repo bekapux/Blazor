@@ -1,0 +1,23 @@
+﻿@page "/learnBlazor/parentComponent"
+@using Tangy_server.Pages.LearnBlazor.LearnBlazorComponents
+
+<h3>Parent Child Relation</h3>
+
+
+<CascadingValue Value="@MessageForGrandchchild">
+    <_ChildComponent OnButtonClick="ShowMessage" Title="This title is passed as parameter from Parent Component">
+        <ChildContent>Render Fragment from Parent</ChildContent>
+    </_ChildComponent>
+</CascadingValue>
+
+
+<p><b>@messageText</b></p>
+
+@code {
+    public string MessageForGrandchchild = "message for grandchild from parent";
+    public string messageText = "";
+    private void ShowMessage()
+    {
+        messageText = "Tangy button clicked from child component";
+    }
+}

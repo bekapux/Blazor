@@ -1,0 +1,13 @@
+﻿<h3>_GrandChildComponent</h3>
+
+<div>
+    <p>Message - @Penguin</p>
+    <p>Second Param - @SecondParam</p>
+</div>
+
+@code {
+    [CascadingParameter]
+    public string Penguin { get; set; }
+    [CascadingParameter]
+    public string SecondParam { get; set; }
+}
