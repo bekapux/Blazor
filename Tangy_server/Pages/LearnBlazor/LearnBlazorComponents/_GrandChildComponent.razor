@@ -2,12 +2,12 @@
 
 <div>
     <p>Message - @Penguin</p>
-    <p>Second Param - @SecondParam</p>
+    <p>Second Param - @LuckyNum</p>
 </div>
 
 @code {
-    [CascadingParameter]
+    [CascadingParameter(Name = "message")]
     public string Penguin { get; set; }
-    [CascadingParameter]
-    public string SecondParam { get; set; }
+    [CascadingParameter(Name = "luckyNum")]
+    public string LuckyNum { get; set; }
 }
