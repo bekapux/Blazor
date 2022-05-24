@@ -1,6 +1,5 @@
 ﻿@page "/learnBlazor/parentComponent"
 @using Tangy_server.Pages.LearnBlazor.LearnBlazorComponents
-
 <h3>Parent Child Relation</h3>
 
 
@@ -8,17 +7,21 @@
 
     <CascadingValue Value="@LuckyNumber" Name="luckyNum">
 
-        <_ChildComponent OnButtonClick="ShowMessage" Title="This title is passed as parameter from Parent Component">
+        <_ChildComponent @ref="childComp" OnButtonClick="ShowMessage" Title="This title is passed as parameter from Parent Component">
             <ChildContent>Render Fragment from Parent</ChildContent>
         </_ChildComponent>
 
     </CascadingValue>
 </CascadingValue>
 
+<div class="row">
+    <buttom @onclick="()=>childComp.showSuccess()" class="btn btn-primary">Call child method from parent</buttom>
+</div>
 
 <p><b>@messageText</b></p>
 
 @code {
+    private _ChildComponent childComp;
     public string MessageForGrandchchild = "message for grandchild from parent";
     public string LuckyNumber = "7";
     public string messageText = "";
@@ -27,4 +30,6 @@
     {
         messageText = "Tangy button clicked from child component";
     }
+
+    
 }
