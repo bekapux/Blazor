@@ -1,0 +1,42 @@
+﻿<h3>_LifeCycleChild</h3>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <ul class=list-group>
+            @foreach(var item in EventType)
+            {
+                <li class="list-group-item">
+                    @DateTime.Now - @item
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int CountValue { get; set; }
+    List<string> EventType = new List<string>();
+
+    //protected override void OnInitialized()
+    //{
+    //    EventType.Add("Child - " + nameof(OnInitialized) + " Is Called");
+    //}
+
+    //protected override void OnParametersSet()
+    //{
+    //    EventType.Add($"Child - {nameof(OnParametersSet)} Is Called\nParameter: {CountValue}");
+    //}
+
+    //protected override void OnAfterRender(bool firstRender)
+    //{
+    //    EventType.Add($"Child - {nameof(OnAfterRender)} Is Called\nParameter: {CountValue}");
+    //}
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Task.Delay(1000);
+        EventType.Add($"Child - {nameof(OnAfterRenderAsync)} Is Called\nParameter: {CountValue}");
+    }
+}

@@ -1,0 +1,18 @@
+﻿@page "/category/create"
+
+<div class="row my-2">
+    <h3 class="card-title text-primary mb-3 ml-3"> @Title Category</h3>
+
+    <div class="col-12">
+        <EditForm>
+
+        </EditForm>
+    </div>
+</div>
+
+<h3>CategoryUpsert</h3>
+
+@code {
+    private CategoryDto Category { get; set; } = new CategoryDto();
+    public string Title { get; set; } = "Create";
+}
