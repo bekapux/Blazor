@@ -28,3 +28,10 @@ window.ShowSweetAlert = (title, message, icon, button) => {
             button: button,
         });
 }
+
+window.ShowDeleteConfirmationModal = () => {
+    $('#deleteConfirmationModal').modal('show');
+}
+window.HideDeleteConfirmationModal = () => {
+    $('#deleteConfirmationModal').modal('hide');
+}

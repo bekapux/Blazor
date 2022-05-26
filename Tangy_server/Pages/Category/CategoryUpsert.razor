@@ -1,18 +1,56 @@
 ﻿@page "/category/create"
+@page "/category/create/{Id:int}"
+@using Tangy_Business.Repository.IRepository
+
+@inject IJSRuntime _JSruntime
+@inject ICategoryRepository CategoryRepository
+@inject NavigationManager _navMan;
 
 <div class="row my-2">
     <h3 class="card-title text-primary mb-3 ml-3"> @Title Category</h3>
 
-    <div class="col-12">
-        <EditForm>
-
+    <div class="col-10">
+        <EditForm Model="Category" OnValidSubmit="UpsertCategory">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label>Name</label>
+                <InputText @bind-Value="Category.Name" class="form-control"></InputText>
+                <ValidationMessage For="()=>Category.Name" />
+            </div>
+            <div class="form-group py-2">
+                <button class="btn btn-primary" type="submit">@Title</button>
+                <NavLink href="category" class="btn btn-secondary">Back to index</NavLink>
+            </div>
         </EditForm>
     </div>
 </div>
 
-<h3>CategoryUpsert</h3>
-
 @code {
     private CategoryDto Category { get; set; } = new CategoryDto();
-    public string Title { get; set; } = "Create";
+    [Parameter]
+    public int Id { get; set; }
+    public string Title => Id == 0 ? "Create" : "Update";
+
+    private async void logInput()
+    {
+        await _JSruntime.Log(Category.Name);
+    }
+
+    private async Task UpsertCategory()
+    {
+        if (Id == 0)
+        {
+            await CategoryRepository.Create(Category);
+        }
+        else
+        {
+            await CategoryRepository.Update(Category);
+        }
+        _navMan.NavigateTo("/learn-blazor/bind-prop");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Id != 0 && firstRender) Category = await CategoryRepository.Get(Id); StateHasChanged();
+    }
 }

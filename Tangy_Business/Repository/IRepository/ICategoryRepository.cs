@@ -9,6 +9,6 @@ namespace Tangy_Business.Repository.IRepository
 
         public Task<int >Delete(int id);
         public Task<IEnumerable<CategoryDto>> GetAll();
-        public Task<CategoryDto> Get(int id);
+        public Task<CategoryDto> Get(int? id);
     }
 }

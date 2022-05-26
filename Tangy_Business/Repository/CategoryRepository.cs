@@ -21,7 +21,8 @@ namespace Tangy_Business.Repository
         {
             var category = _mapper.Map<Category>(newCategory);
             category.CreatedDate = DateTime.Now;
-            await _context.Categories.AddAsync(category);
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
             return _mapper.Map<CategoryDto>(category);
         }
 
@@ -33,7 +34,7 @@ namespace Tangy_Business.Repository
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<CategoryDto> Get(int id)
+        public async Task<CategoryDto> Get(int? id)
         {
             var category = _mapper.Map<CategoryDto>(await _context.Categories.FirstOrDefaultAsync(x => x.Id == id));
             if (category != null)
@@ -44,7 +45,8 @@ namespace Tangy_Business.Repository
 
         public async Task<IEnumerable<CategoryDto>> GetAll()
         {
-            return _mapper.Map<IEnumerable<CategoryDto>>(await _context.Categories.ToListAsync());
+            var cats = await _context.Categories.ToListAsync();
+            return _mapper.Map<IEnumerable<CategoryDto>>(cats);
         }
 
         public async Task<CategoryDto> Update(CategoryDto UpdatedCategory)
