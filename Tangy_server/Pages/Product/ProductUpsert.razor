@@ -1,0 +1,150 @@
+﻿@page "/product/create"
+@page "/product/edit/{Id:int}"
+
+@inject IProductRepository products
+@inject ICategoryRepository categories
+@inject IFileUpload fileService
+@inject NavigationManager navMan
+@inject IJSRuntime JS
+<h3 class="card-title text-primary mb-3 ml-3"> @Title Category</h3>
+
+<EditForm Model="Product" OnValidSubmit="UpsertProduct">
+    <DataAnnotationsValidator />
+    <div class="row">
+        @*<----------- Name ---------->*@
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>Name</label>
+                <InputText @bind-Value="Product.Name" class="form-control"></InputText>
+                <ValidationMessage For="()=>Product.Name" />
+            </div>
+        </div>
+        @*<----------- Color ---------->*@
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>Color</label>
+                <InputText @bind-Value="Product.Color" class="form-control"></InputText>
+                <ValidationMessage For="()=>Product.Color" />
+            </div>
+        </div>
+        @*<----------- Description ---------->*@
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="form-group">
+                <label>Description</label>
+                <InputTextArea class="form-control" @bind-Value="Product.Description"></InputTextArea>
+                <ValidationMessage For="()=>Product.Description" />
+            </div>
+        </div>
+
+        <div class="row pt-3">
+            <div class="btn-group col-6">
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="Product.ShopFavourites" class="form-check-input"></InputCheckbox>
+                    <label class="form-check-label">Shop Favourites</label>
+                </div>
+            </div>
+            <div class="btn-group col-6">
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="Product.CustomerFavourites" class="form-check-input"></InputCheckbox>
+                    <label class="form-check-label">Customer Favourites</label>
+                </div>
+            </div>
+        </div>
+
+
+        @*<----------- Category ---------->*@
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>Category</label>
+                <InputSelect @bind-Value="Product.CategoryId" class="form-select">
+                    <option value="0" disabled="disabled" selected>---Select Category---</option>
+                    @foreach (var category in Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="()=>Product.CategoryId"></ValidationMessage>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <InputFile OnChange="HandleImageUpload"/>
+        </div>
+
+    </div>
+    @*<----------- Actions ---------->*@
+    <div class="form-group py-2">
+        <button class="btn btn-primary" type="submit">@Title</button>
+        <NavLink href="product" class="btn btn-secondary">Back to index</NavLink>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; } = 0;
+    public ProductDto Product { get; set; } = new ProductDto();
+    public IEnumerable<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
+    public string Title => Id == 0 ? "Add Product" : "Edit Product";
+    public bool IsLoading { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadProduct();
+        }
+        StateHasChanged();
+    }
+
+    private async Task LoadProduct()
+    {
+        IsLoading = true;
+        StateHasChanged();
+        Categories = await categories.GetAll();
+        if (Id != 0)
+        {
+            Product = await products.Get(Id);
+        }
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleImageUpload(InputFileChangeEventArgs e)
+    {
+        IsLoading = true;
+        try
+        {
+            if (e.GetMultipleFiles().Count > 0)
+            {
+                foreach(var file in e.GetMultipleFiles())
+                {
+                    System.IO.FileInfo fileinfo = new(file.Name);
+                    if(
+                        fileinfo.Extension.ToLower() == ".jpg" ||
+                        fileinfo.Extension.ToLower() == ".png" ||
+                        fileinfo.Extension.ToLower() == ".jpeg"
+                    )
+                    {
+                        Product.ImageUrl = await fileService.UploadFile(file);
+                    }
+                    else
+                    {
+                        await JS.ToastrError("Incorrect Format");
+                        return;
+                    }
+                }
+            }
+            IsLoading = false;
+        }
+        catch(Exception ex)
+        {
+            await JS.ToastrError("Something went wrong");
+        }
+    }
+
+    private async Task UpsertProduct()
+    {
+        if (Product.Id == 0) await products.Create(Product);
+        else await products.Update(Product);
+        navMan.NavigateTo("/product");
+    }
+}

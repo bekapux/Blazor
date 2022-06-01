@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Shared\Modals\" />
+    <Folder Include="wwwroot\images\product\" />
   </ItemGroup>
 
 </Project>
