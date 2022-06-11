@@ -11,6 +11,7 @@
 <EditForm Model="Product" OnValidSubmit="UpsertProduct">
     <DataAnnotationsValidator />
     <div class="row">
+        <div class=""
         @*<----------- Name ---------->*@
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="form-group">
@@ -28,7 +29,7 @@
             </div>
         </div>
         @*<----------- Description ---------->*@
-        <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="form-group">
                 <label>Description</label>
                 <InputTextArea class="form-control" @bind-Value="Product.Description"></InputTextArea>
@@ -76,12 +77,17 @@
         <button class="btn btn-primary" type="submit">@Title</button>
         <NavLink href="product" class="btn btn-secondary">Back to index</NavLink>
     </div>
+    
+    <img src="@Product.ImageUrl" />
 </EditForm>
 
 @code {
     [Parameter]
     public int Id { get; set; } = 0;
-    public ProductDto Product { get; set; } = new ProductDto();
+    public ProductDto Product { get; set; } = new ProductDto
+    {
+        ImageUrl = "/images/default.png"
+    };
     public IEnumerable<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
     public string Title => Id == 0 ? "Add Product" : "Edit Product";
     public bool IsLoading { get; set; }
@@ -124,6 +130,7 @@
                         fileinfo.Extension.ToLower() == ".jpeg"
                     )
                     {
+                        //var ProductHadPhoto = fileService.DeleteFile(Product.ImageUrl);
                         Product.ImageUrl = await fileService.UploadFile(file);
                     }
                     else
@@ -135,7 +142,7 @@
             }
             IsLoading = false;
         }
-        catch(Exception ex)
+        catch
         {
             await JS.ToastrError("Something went wrong");
         }
